@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sync-elasticsearch-mysql
+    version: "0.0.1"
+  name: sync-elasticsearch-mysql
+  namespace: sync-elasticsearch-mysql-ns 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sync-elasticsearch-mysql
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 10%
+  template:
+    metadata:
+      labels:
+        app: sync-elasticsearch-mysql
+        version: "0.0.1"
+    spec:
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: logstash-queries-volume
+          configMap:
+            name: logstash-queries
+        - name: logstash-pipeline-volume
+          configMap:
+            name: logstash-pipeline
+        - name: logstash-config-volume
+          configMap:
+            name: logstash-config
+        - name: logstash-secrets-volume
+          secret:
+            secretName: logstash-secrets
+      containers:
+        - image: "barisgece/sync-elasticsearch-mysql:0.0.1"
+          imagePullPolicy: Always
+          name: sync-elasticsearch-mysql
+          volumeMounts:
+            - name: logstash-queries-volume
+              mountPath: /usr/share/logstash/config/queries
+            - name: logstash-pipeline-volume
+              mountPath: "/usr/share/logstash/pipeline"
+            - name: logstash-config-volume
+              mountPath: "/usr/share/logstash/config"
+          env:
+            - name: ELASTIC_VERSION
+              valueFrom:
+                secretKeyRef:
+                  name: logstash-secrets
+                  key: ELASTIC_VERSION
+            - name: ELASTIC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: logstash-secrets
+                  key: ELASTIC_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: logstash-secrets
+                  key: MYSQL_DATABASE
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: logstash-secrets
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: logstash-secrets
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: logstash-secrets
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: logstash-secrets
+                  key: MYSQL_PATH
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: 1000m
+            requests:
+              memory: 1Gi
+              cpu: 500m
+      nodeSelector:
+        nodegroup-type: ban-server-workloads
+        role: application-server
+        goal: ban-server
+        version: ban-server-v1
