@@ -1,0 +1,13 @@
+ARG ELASTIC_VERSION=7.9.3
+FROM docker.elastic.co/logstash/logstash:$ELASTIC_VERSION
+
+# Download JDBC connector for Logstash
+RUN curl -L --output "mysql-connector-java-8.0.23.tar.gz" "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.23.tar.gz" \
+    && tar -xf "mysql-connector-java-8.0.23.tar.gz" "mysql-connector-java-8.0.23/mysql-connector-java-8.0.23.jar" \
+    && mv "mysql-connector-java-8.0.23/mysql-connector-java-8.0.23.jar" "mysql-connector-java-8.0.23.jar" \
+    && rm -r "mysql-connector-java-8.0.23" "mysql-connector-java-8.0.23.tar.gz"
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint"]
+
+# docker build --build-arg ELASTIC_VERSION=7.10.2 -t barisgece/sync-elasticsearch-mysql:0.0.1 -f ./Dockerfile-logstash .
+# docker push barisgece/sync-elasticsearch-mysql:0.0.1
