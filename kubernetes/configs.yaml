@@ -168,13 +168,13 @@ metadata:
   labels:
     app.kubernetes.io/name: sync-elasticsearch-mysql
 data:
-  logstash.yaml: |-
+  logstash.yml: |-
     http.host: "0.0.0.0"
     xpack.monitoring.enabled: false # Disabled for AWS ElasticSearch Services
     # xpack.monitoring.elasticsearch.hosts: [ "http://elasticsearch:9200" ]
     xpack.monitoring.elasticsearch.hosts: [ "${ELASTIC_HOST}" ]
     log.level: info
-  pipelines.yaml: |-
+  pipelines.yml: |-
     - pipeline.id: from-scratch-pipeline
       path.config: "/usr/share/logstash/pipeline/from-scratch.conf"
 
