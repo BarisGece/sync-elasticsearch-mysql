@@ -1,1 +1,1 @@
-SELECT * FROM new_teams WHERE is_deleted = 0
+SELECT * FROM teams WHERE is_deleted = 0

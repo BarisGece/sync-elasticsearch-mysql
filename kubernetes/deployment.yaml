@@ -58,6 +58,11 @@ spec:
                 secretKeyRef:
                   name: logstash-secrets
                   key: ELASTIC_PASSWORD
+            - name: ELASTIC_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: logstash-secrets
+                  key: ELASTIC_HOST
             - name: MYSQL_DATABASE
               valueFrom:
                 secretKeyRef:

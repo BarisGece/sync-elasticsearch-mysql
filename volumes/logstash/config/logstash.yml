@@ -1,5 +1,5 @@
 http.host: "0.0.0.0"
 xpack.monitoring.enabled: false # Disabled for AWS ElasticSearch Services
 xpack.monitoring.elasticsearch.hosts: [ "http://elasticsearch:9200" ]
-# xpack.monitoring.elasticsearch.hosts: [ "https://elasticsearch.aws.vpc.endpoint:443" ]
+# xpack.monitoring.elasticsearch.hosts: [ "${ELASTIC_HOST}" ]
 log.level: info
