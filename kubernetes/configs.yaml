@@ -8,16 +8,11 @@ metadata:
     app.kubernetes.io/name: sync-elasticsearch-mysql
 data:
   from-scratch.sql: |-
-    SELECT * FROM teams WHERE is_deleted = 0
+    SELECT *, UNIX_TIMESTAMP(modification_date) FROM teams WHERE is_deleted = 0
   incremental.sql: |-
     SELECT *, UNIX_TIMESTAMP(modification_date) AS unix_ts_in_secs 
     FROM teams 
-    WHERE (is_deleted = 0 AND UNIX_TIMESTAMP(modification_date) > :sql_last_value AND modification_date < NOW()) 
-    ORDER BY modification_date ASC
-  incremental-delete.sql: |-
-    SELECT *, UNIX_TIMESTAMP(modification_date) AS unix_ts_in_secs 
-    FROM teams 
-    WHERE (is_deleted = 1 AND UNIX_TIMESTAMP(modification_date) > :sql_last_value AND modification_date < NOW()) 
+    WHERE (AND UNIX_TIMESTAMP(modification_date) > :sql_last_value AND modification_date < NOW()) 
     ORDER BY modification_date ASC
 ---
 apiVersion: v1
@@ -64,52 +59,6 @@ data:
         password => "${ELASTIC_PASSWORD}"
         ilm_enabled => false # Disabled for AWS ElasticSearch
         action => "index"
-        document_id => "%{[@metadata][_id]}"
-      }
-    }
-  incremental-delete.conf: |-
-    input {
-      jdbc {
-        jdbc_driver_library => "/usr/share/logstash/mysql-connector-java-8.0.23.jar"
-        jdbc_driver_class => "com.mysql.jdbc.Driver"
-        jdbc_connection_string => "jdbc:mysql://${MYSQL_PATH}:3306/${MYSQL_DATABASE}"
-        jdbc_user => "${MYSQL_USER}"
-        jdbc_password => "${MYSQL_PASSWORD}"
-        jdbc_paging_enabled => true
-        tracking_column => "unix_ts_in_secs"
-        use_column_value => true
-        tracking_column_type => "numeric"
-        sql_log_level => "debug"  # Set Logstash logging level as this
-        statement_filepath => "/usr/share/logstash/config/queries/incremental.sql"
-        schedule => "* */1 * * * *"   # Run every 1 minutes
-      }
-    }
-
-    filter {
-      if [is_deleted] == 1 {
-        mutate { add_field => { "[@metadata][action]" => "delete" } }
-      } else if [is_deleted] == 0 {
-        mutate { add_field => { "[@metadata][action]" => "index" } }
-      } else {
-        mutate { add_field => { "[@metadata][action]" => "delete" } }
-      }
-
-      mutate {
-        copy => { "team_id" => "[@metadata][_id]"}
-        remove_field => ["team_id", "@version", "unix_ts_in_secs"]
-      }
-    }
-
-    output {
-      # stdout { codec => rubydebug { metadata => true } }
-      elasticsearch {
-        hosts => ["${ELASTIC_HOST}"]
-        #hosts => ["http://elasticsearch:9200"]
-        index => "teams"
-        user => "elastic"
-        password => "${ELASTIC_PASSWORD}"
-        ilm_enabled => false # Disabled for AWS ElasticSearch
-        action => "%{[@metadata][action]}"
         document_id => "%{[@metadata][_id]}"
       }
     }

@@ -1,4 +1,4 @@
 SELECT *, UNIX_TIMESTAMP(modification_date) AS unix_ts_in_secs 
-FROM teams
-WHERE (is_deleted = 0 AND UNIX_TIMESTAMP(modification_date) > :sql_last_value AND modification_date < NOW())
+FROM teams 
+WHERE (AND UNIX_TIMESTAMP(modification_date) > :sql_last_value AND modification_date < NOW()) 
 ORDER BY modification_date ASC

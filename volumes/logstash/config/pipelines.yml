@@ -7,6 +7,3 @@
 
 - pipeline.id: incremental-pipeline
   path.config: "/usr/share/logstash/pipeline/incremental.conf"
-
-- pipeline.id: incremental-delete-pipeline
-  path.config: "/usr/share/logstash/pipeline/incremental-delete.conf"
