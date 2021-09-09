@@ -57,7 +57,7 @@ data:
     output {
       # stdout { codec => rubydebug { metadata => true } }
       elasticsearch {
-        #hosts => ["https://elasticsearch.test.royalmatch.drmgms.com:443"]
+        #hosts => ["https://elasticsearch.test.aws.com:443"]
         hosts => ["http://elasticsearch:9200"]
         index => "new_teams"
         user => "elastic"
@@ -103,7 +103,7 @@ data:
     output {
       # stdout { codec => rubydebug { metadata => true } }
       elasticsearch {
-        #hosts => ["https://elasticsearch.test.royalmatch.drmgms.com:443"]
+        #hosts => ["https://elasticsearch.test.aws.com:443"]
         hosts => ["http://elasticsearch:9200"]
         index => "new_teams"
         user => "elastic"
@@ -149,7 +149,7 @@ data:
     output {
       # stdout { codec => rubydebug { metadata => true } }
       elasticsearch {
-        #hosts => ["https://elasticsearch.test.royalmatch.drmgms.com:443"]
+        #hosts => ["https://elasticsearch.test.aws.com:443"]
         hosts => ["http://elasticsearch:9200"]
         index => "new_teams"
         user => "elastic"
