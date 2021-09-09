@@ -9,6 +9,10 @@ Using Logstash to synchronize an Elasticsearch index with MySQL data
   - [Testing](#testing)
   - [Resources](#resources)
 
+| Tag     | Dockerfile                          | Image Size                                                                                                                                                                                            |
+| :------ | :---------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:          |
+| `0.0.1` | [Dockerfile](./Dockerfile-logstash) | [![Logstash-JBDC Connector/J Image Size](https://img.shields.io/docker/image-size/barisgece/sync-elasticsearch-mysql/0.0.1.svg?logo=docker&color=2496ED "Logstash-JBDC Connector/J Image Size")][hub] |
+
 ## Introduction
 
 This project is a working example demonstrating how to use Logstash to link Elasticsearch to a MySQL database in order to:
@@ -24,7 +28,7 @@ It uses:
 - Logstash as a connector or data pipe from MySQL to Elasticsearch (version 7.10.2)
 - Kibana for monitoring, data visualization, and debuging tool (version 7.10.2)
 
-> This project has been developed based on the [**`sync-elasticsearch-mysql`**](https://github.com/redouane-dev/sync-elasticsearch-mysql) project prepared by [Redouane Achouri](https://www.redouaneachouri.com/). It is described in details in this article: [How to synchronize Elasticsearch with MySQL](https://towardsdatascience.com/how-to-synchronize-elasticsearch-with-mysql-ed32fc57b339)
+> This project has been developed based on the [**`sync-elasticsearch-mysql`**](https://github.com/redouane-dev/sync-elasticsearch-mysql) project prepared by [Redouane Achouri](https://www.redouaneachouri.com/). ***More details in this article***: [How to synchronize Elasticsearch with MySQL](https://towardsdatascience.com/how-to-synchronize-elasticsearch-with-mysql-ed32fc57b339)
 
 ![Architecture of this project](./docs/sync-elasticsearch-mysql.png)
 
@@ -41,7 +45,7 @@ On your development/local environment, run the following commands on a terminal:
 git clone https://github.com/BarisGece/sync-elasticsearch-mysql.git && cd sync-elasticsearch-mysql
 
 # Start the whole architecture
-docker-compose up # add -d for detached mode
+docker-compose up --build # add -d for detached mode
 
 # To keep an eye on the logs
 docker-compose logs -f --tail 111 <service-name>
@@ -70,3 +74,5 @@ Please refer to the above article for testing steps.
 - [Logstash JDBC input plugin](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-jdbc.html)
 - [Logstash Mutate filter plugin](https://www.elastic.co/guide/en/logstash/current/plugins-filters-mutate.html)
 - [Logstash Elasticsearch output plugin](https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html)
+
+[hub]: https://hub.docker.com/repository/docker/barisgece/sync-elasticsearch-mysql
