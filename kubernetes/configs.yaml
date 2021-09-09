@@ -33,7 +33,7 @@ data:
       jdbc {
         jdbc_driver_library => "/usr/share/logstash/mysql-connector-java-8.0.23.jar"
         jdbc_driver_class => "com.mysql.jdbc.Driver"
-        jdbc_connection_string => "jdbc:mysql://mysql:3306/${MYSQL_DATABASE}"
+        jdbc_connection_string => "jdbc:mysql://${MYSQL_PATH}:3306/${MYSQL_DATABASE}"
         jdbc_user => "${MYSQL_USER}"
         jdbc_password => "${MYSQL_PASSWORD}"
         jdbc_paging_enabled => true
@@ -72,7 +72,7 @@ data:
       jdbc {
         jdbc_driver_library => "/usr/share/logstash/mysql-connector-java-8.0.23.jar"
         jdbc_driver_class => "com.mysql.jdbc.Driver"
-        jdbc_connection_string => "jdbc:mysql://mysql:3306/${MYSQL_DATABASE}"
+        jdbc_connection_string => "jdbc:mysql://${MYSQL_PATH}:3306/${MYSQL_DATABASE}"
         jdbc_user => "${MYSQL_USER}"
         jdbc_password => "${MYSQL_PASSWORD}"
         jdbc_paging_enabled => true
@@ -118,7 +118,7 @@ data:
       jdbc {
         jdbc_driver_library => "/usr/share/logstash/mysql-connector-java-8.0.23.jar"
         jdbc_driver_class => "com.mysql.jdbc.Driver"
-        jdbc_connection_string => "jdbc:mysql://mysql:3306/${MYSQL_DATABASE}"
+        jdbc_connection_string => "jdbc:mysql://${MYSQL_PATH}:3306/${MYSQL_DATABASE}"
         jdbc_user => "${MYSQL_USER}"
         jdbc_password => "${MYSQL_PASSWORD}"
         jdbc_paging_enabled => true
