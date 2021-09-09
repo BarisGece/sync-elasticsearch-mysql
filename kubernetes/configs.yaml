@@ -67,7 +67,7 @@ data:
         document_id => "%{[@metadata][_id]}"
       }
     }
-  incremental.conf: |-
+  incremental-delete.conf: |-
     input {
       jdbc {
         jdbc_driver_library => "/usr/share/logstash/mysql-connector-java-8.0.23.jar"
@@ -113,7 +113,7 @@ data:
         document_id => "%{[@metadata][_id]}"
       }
     }
-  incremental-delete.conf: |-
+  incremental.conf: |-
     input {
       jdbc {
         jdbc_driver_library => "/usr/share/logstash/mysql-connector-java-8.0.23.jar"
