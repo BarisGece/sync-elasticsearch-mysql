@@ -1,1 +1,1 @@
-SELECT *, UNIX_TIMESTAMP(modification_date) FROM teams WHERE is_deleted = 0
+SELECT *, UNIX_TIMESTAMP(modification_date) AS unix_ts_in_secs FROM teams WHERE is_deleted = 0
