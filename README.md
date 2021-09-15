@@ -7,6 +7,7 @@ Using Logstash to synchronize an Elasticsearch index with MySQL data
   - [Deployment](#deployment)
   - [Kubernetes Deployment](#kubernetes-deployment)
   - [Testing](#testing)
+  - [Elasticsearch Performance Tuning Practice](#elasticsearch-performance-tuning-practice)
   - [Resources](#resources)
 
 | Tag     | Dockerfile                          | Image Size                                                                                                                                                                                            |
@@ -66,6 +67,23 @@ docker-compose up logstash
 ## Testing
 
 Please refer to the above article for testing steps.
+
+## Elasticsearch Performance Tuning Practice
+
+- [Elasticsearch Performance Tuning Practice at eBay](https://tech.ebayinc.com/engineering/elasticsearch-performance-tuning-practice-at-ebay/)
+- [Tune for search speed](https://www.elastic.co/guide/en/elasticsearch/reference/master/tune-for-search-speed.html#tune-for-search-speed)
+- [**`rally`** : Macrobenchmarking framework for Elasticsearch](https://github.com/elastic/rally)
+- [`index.number_of_shards`](https://www.elastic.co/guide/en/elasticsearch/reference/master/index-modules.html#_static_index_settings) : The number of primary shards that an index should have. Defaults to 1. This setting can only be set at index creation time. It cannot be changed on a closed index.
+  - [For search operations, 20-25 GB is usually a good shard size - 2. Generic guidelines](https://opster.com/elasticsearch-glossary/elasticsearch-choose-number-of-shards/)
+  - [Aim for 20 shards or fewer per GB of heap memory](https://www.elastic.co/guide/en/elasticsearch/reference/current/size-your-shards.html#shard-count-recommendation)
+The number of shards a node can hold is proportional to the nod
+  - [A shard size of 50GB is often quoted as a limit that has been seen to work for a variety of use-cases.](https://www.elastic.co/blog/how-many-shards-should-i-have-in-my-elasticsearch-cluster)
+- [`index.number_of_replicas`](https://www.elastic.co/guide/en/elasticsearch/reference/master/index-modules.html#dynamic-index-settings) : The number of replicas each primary shard has. Defaults to 1.
+  - [Replicas might help with throughput, but not always](https://www.elastic.co/guide/en/elasticsearch/reference/master/tune-for-search-speed.html#_replicas_might_help_with_throughput_but_not_always)
+- [`index.refresh_interval`](https://www.elastic.co/guide/en/elasticsearch/reference/master/index-modules.html#dynamic-index-settings) : How often to perform a refresh operation, which makes recent changes to the index visible to search. Defaults to 1s.
+- [`index.search.idle.after`](https://www.elastic.co/guide/en/elasticsearch/reference/master/index-modules.html#dynamic-index-settings) : How long a shard can not receive a search or get request until it’s considered search idle. (default is 30s)
+- [`index.sort.field` - `index.sort.order`](https://www.elastic.co/guide/en/elasticsearch/reference/master/index-modules-index-sorting.html)
+  - [Use index sorting to speed up conjunctions](https://www.elastic.co/guide/en/elasticsearch/reference/master/tune-for-search-speed.html#_use_index_sorting_to_speed_up_conjunctions)
 
 ## Resources
 
