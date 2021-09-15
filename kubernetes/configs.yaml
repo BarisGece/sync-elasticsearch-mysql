@@ -148,8 +148,22 @@ data:
     {
       "template": "teams",
       "settings": {
-          "number_of_shards": 30,
-          "refresh_interval" : "15s",
-          "number_of_replicas" : 2
+        "number_of_shards": 3,
+        "number_of_replicas": 2,
+        "refresh_interval": "5s",
+        "search": {
+          "idle": {
+            "after": "3600s"
+          }
+        },
+        "sort.field": "member_count",
+        "sort.order": "desc"
+      },
+      "mappings": {
+        "properties": {
+          "member_count": {
+            "type": "integer"
+          }
+        }
       }
     }
