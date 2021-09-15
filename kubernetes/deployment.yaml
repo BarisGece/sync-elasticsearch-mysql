@@ -33,6 +33,9 @@ spec:
         - name: logstash-config-volume
           configMap:
             name: logstash-config
+        - name: logstash-template-volume
+          configMap:
+            name: logstash-template
         - name: logstash-secrets-volume
           secret:
             secretName: logstash-secrets
@@ -47,6 +50,8 @@ spec:
               mountPath: "/usr/share/logstash/pipeline"
             - name: logstash-config-volume
               mountPath: "/usr/share/logstash/config"
+            - name: logstash-template-volume
+              mountPath: "/usr/share/logstash/template"
           env:
             - name: ELASTIC_VERSION
               valueFrom:

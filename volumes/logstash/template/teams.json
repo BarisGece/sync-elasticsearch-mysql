@@ -1,0 +1,8 @@
+{
+  "template": "teams",
+  "settings": {
+      "number_of_shards": 30,
+      "refresh_interval" : "15s",
+      "number_of_replicas" : 2
+  }
+}
