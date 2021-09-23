@@ -45,8 +45,13 @@ data:
 
     filter {
       mutate {
+        add_field => { "l_name" => "%{name}" }
         copy => { "team_id" => "[@metadata][_id]"}
         remove_field => ["team_id", "@version", "unix_ts_in_secs"]
+      }
+
+      mutate {
+        lowercase => ["l_name"]
       }
     }
 
@@ -89,12 +94,18 @@ data:
       if [is_deleted] {
         mutate { add_field => { "[@metadata][action]" => "delete" } }
       } else {
-        mutate { add_field => { "[@metadata][action]" => "index" } }
+        mutate { 
+          add_field => { 
+            "[@metadata][action]" => "index"
+            "l_name" => "%{name}" 
+          }
+        }
       }
 
       mutate {
         copy => { "team_id" => "[@metadata][_id]"}
         remove_field => ["team_id", "@version", "unix_ts_in_secs"]
+        lowercase => ["l_name"]
       }
     }
 
