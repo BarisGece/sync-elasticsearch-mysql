@@ -64,8 +64,9 @@ data:
         user => "elastic"
         password => "${ELASTIC_PASSWORD}"
         ilm_enabled => false # Disabled for AWS ElasticSearch
-        action => "index"
+        action => "update"
         document_id => "%{[@metadata][_id]}"
+        doc_as_upsert => true
         template => "/usr/share/logstash/template/teams.json"
         template_name => "teams"
         template_overwrite => "false"
@@ -96,7 +97,7 @@ data:
       } else {
         mutate { 
           add_field => { 
-            "[@metadata][action]" => "index"
+            "[@metadata][action]" => "update"
             "l_name" => "%{name}" 
           }
         }
@@ -111,18 +112,35 @@ data:
 
     output {
       # stdout { codec => rubydebug { metadata => true } }
-      elasticsearch {
-        hosts => ["${ELASTIC_HOST}"]
-        #hosts => ["http://elasticsearch:9200"]
-        index => "teams"
-        user => "elastic"
-        password => "${ELASTIC_PASSWORD}"
-        ilm_enabled => false # Disabled for AWS ElasticSearch
-        action => "%{[@metadata][action]}"
-        document_id => "%{[@metadata][_id]}"
-        template => "/usr/share/logstash/template/teams.json"
-        template_name => "teams"
-        template_overwrite => "false"
+      if [is_deleted] {
+        elasticsearch {
+          hosts => ["${ELASTIC_HOST}"]
+          #hosts => ["http://elasticsearch:9200"]
+          index => "teams"
+          user => "elastic"
+          password => "${ELASTIC_PASSWORD}"
+          ilm_enabled => false # Disabled for AWS ElasticSearch
+          action => "%{[@metadata][action]}"
+          document_id => "%{[@metadata][_id]}"
+          template => "/usr/share/logstash/template/teams.json"
+          template_name => "teams"
+          template_overwrite => "false"
+        }
+      } else {
+        elasticsearch {
+          hosts => ["${ELASTIC_HOST}"]
+          #hosts => ["http://elasticsearch:9200"]
+          index => "teams"
+          user => "elastic"
+          password => "${ELASTIC_PASSWORD}"
+          ilm_enabled => false # Disabled for AWS ElasticSearch
+          action => "update"
+          document_id => "%{[@metadata][_id]}"
+          doc_as_upsert => true
+          template => "/usr/share/logstash/template/teams.json"
+          template_name => "teams"
+          template_overwrite => "false"
+        }
       }
     }
 ---
